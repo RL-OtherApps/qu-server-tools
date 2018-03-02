@@ -1,0 +1,42 @@
+<!--
+Copyright 2017 valentin vinagre <valentin.vinagre@qubiq.es>
+License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl)
+-->
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mandate_create_confirm" model="ir.ui.view">
+        <field name="name">Creación de mandatos</field>
+        <field name="model">mandate.create.confirm</field>
+        <field name="arch" type="xml">
+          <form string="Mandate Creation">
+              <label string="Create mandates for parters"/>
+               <group colspan="4" col="4">
+                    <field name="date_signature"/>
+                    <field name="format"/>
+                    <field name="scheme" attrs="{'invisible': [('format', '!=', 'sepa')],'required': [('format', '=', 'sepa')]}"/>
+                    <field name="type" attrs="{'invisible': [('format', '!=', 'sepa')], 'required': [('format', '=', 'sepa')]}"/>
+                    <field name="recurrent_sequence_type" attrs="{'invisible': ['|', ('type', '=', 'oneoff'), ('format', '!=', 'sepa')],'required': [('type', '=', 'recurrent')]}"/>
+                    <field name="lanzar_todo"/>
+               </group>
+              <footer>
+                  <button name="confirm" string="Process" type="object" class="oe_highlight"/>
+                  or
+                  <button string="Cancel" class="oe_link" special="cancel" />
+              </footer>
+        </form>
+        </field>
+    </record>
+
+    <record id="action_mandate_create_confirm" model="ir.actions.act_window">
+        <field name="name">Creación de mandatos</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">mandate.create.confirm</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_mandate_create_confirm"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="mandate_creation_confirm_menu" name="Creación de mandatos"
+              parent="sales_team.menu_config_bank_accounts" action="action_mandate_create_confirm"/>
+</odoo>
