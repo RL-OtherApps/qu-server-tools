@@ -4,7 +4,7 @@
 
 {
     'name': 'Disable VAT Check',
-    'version': '10.0.1.0.0',
+    'version': '10.0.1.0.1',
     'category': 'Custom',
     'description': """
         Remove VAT Check for partner importations.
