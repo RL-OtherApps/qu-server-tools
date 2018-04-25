@@ -1,4 +1,4 @@
-Addons Qubiq Odoo v.10
+Addons QubiQ Odoo v.10
 =============================
 
 [//]: # (addons)
