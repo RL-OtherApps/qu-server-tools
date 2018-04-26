@@ -5,7 +5,7 @@
 {
     "name": "Import Partner Supplier",
     "summary": "Import partners and suppliers",
-    "version": "10.0.1.0.0",
+    "version": "10.0.1.0.2",
     "category": "Partner",
     "website": "https://www.qubiq.es",
     "author": "QubiQ",

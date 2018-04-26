@@ -11,7 +11,7 @@ unique_code,name,comercial,is_company,street,street2,zip,city,state,country,curr
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,
 43000002,EMPRESA MUY BUENA S.A.,,True,1250 Bayhill Drive Suite 315,,94066,San Bruno,,,,Profesional,,,,abc@test.com,www.test.com,DE160705175,False,True,,30 días,ES5420130805320200035284,,,,,
 43000003,Xavier Jimenez,Xavi,False,Carrera 97B #42-41,,8291,Cali,,,,Profesional,935471227,670896318,9511215415,xavier.jimenez@qubiq.es,www.test.com,DE174484417,False,True,,30 días,,,Xavi 2,,xavier.jimenez@qubiq.es,
-43000004,Sergi Oliva,Sergi ,False,Talackerstrasse 53a,,8152,Glattpark,,,,Profesional,935471228,670896319,,sergi.oliva@qubiq.es,www.test.com,DE248376956,False,True,,15 días,DE08100208900028651678,,Sergi 2,,sergi.oliva@qubiq.es,
+43000004,Sergi Oliva,Sergi ,False,Talackerstrasse 53a,,8152,Glattpark,,,,Profesional,935471228,670896319,,sergi.oliva@qubiq.es,www.test.com,DE248376956,False,True,,15 días,DE08100208900028651678,,Sergi 2,Tester,sergi.oliva@qubiq.es,
 43000005,Test1,Testing Corporation,False,Calle Falsa,123,8150,Parets,Barcelona,DE,,Tester,935471229,670896320,,Testing@123.com,,,False,,Tarjeta,Inmediato,ES6901821797380201740464,,,,,
 43000006,OCA,OCA ,True,prueba st,odoo st,8024,Barcelona,Testing,ES,USD,Profesional,935471230,670896321,,testing11@a.cm,,,False,True,Transferencia,Pago inmediato,ES0600493405382094125185,Retención IRPF 15%,Hola,gerente,,
 43000007,Odoo,Odoo,True,prueba st,odoo st,8100,Barcelona,Barcelona,FR,EUR,Supervisor,935471230,670896321,,testing11@a.cm,,,False,True,Transferencia,60 Días,ES0600493405382094125185,Extracomunitario,,,,

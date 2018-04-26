@@ -178,12 +178,19 @@ class ImportPartnerSupplier(models.TransientModel):
         # Create and assign a contact
         if values['contact_name']:
             contact_obj = self.env[
-                'res.partner'].search([(
-                    'name', '=', values['contact_name'])])
+                'res.partner'].search([
+                    ('name', '=', values['contact_name']),
+                    ('parent_id', '!=', False)])
+            _logger.info("PARA CONTACT NAME:")
+            _logger.info(values['contact_name'])
+            _logger.info("CONTACT OBJ:")
+            _logger.info(contact_obj)
             new_contact = True
             if contact_obj:
                 for contact in contact_obj:
-                    if contact.parent_id.name == values['name']:
+                    if contact.parent_id.unique_code == values['unique_code']:
+                        _logger.info("TIENE PARENT:")
+                        _logger.info(contact.parent_id)
                         partner_data.update({
                                 'child_ids': [(1, contact.id, {
                                     'function': values['contact_function'],
@@ -235,7 +242,7 @@ class ImportPartnerSupplier(models.TransientModel):
 
         :return Dict with the columns and its value.
     '''
-    def _action_import(self):
+    def action_import(self):
         """Load Inventory data from the CSV file."""
         if not self.data:
             raise exceptions.Warning(_("You need to select a file!"))
