@@ -181,34 +181,28 @@ class ImportPartnerSupplier(models.TransientModel):
                 'res.partner'].search([
                     ('name', '=', values['contact_name']),
                     ('parent_id', '!=', False)])
-            _logger.info("PARA CONTACT NAME:")
-            _logger.info(values['contact_name'])
-            _logger.info("CONTACT OBJ:")
-            _logger.info(contact_obj)
             new_contact = True
             if contact_obj:
                 for contact in contact_obj:
                     if contact.parent_id.unique_code == values['unique_code']:
-                        _logger.info("TIENE PARENT:")
-                        _logger.info(contact.parent_id)
                         partner_data.update({
-                                'child_ids': [(1, contact.id, {
-                                    'function': values['contact_function'],
-                                    'email': values['contact_email'],
-                                    'mobile': values['contact_mobile'],
-                                    })],
-                            })
+                            'child_ids': [(1, contact.id, {
+                                'function': values['contact_function'],
+                                'email': values['contact_email'],
+                                'mobile': values['contact_mobile'],
+                            })],
+                        })
                         new_contact = False
                         break
             if new_contact:
                 partner_data.update({
-                        'child_ids': [(0, 0, {
-                            'name': values['contact_name'],
-                            'function': values['contact_function'],
-                            'email': values['contact_email'],
-                            'mobile': values['contact_mobile'],
-                            })],
-                    })
+                    'child_ids': [(0, 0, {
+                        'name': values['contact_name'],
+                        'function': values['contact_function'],
+                        'email': values['contact_email'],
+                        'mobile': values['contact_mobile'],
+                    })],
+                })
 
         del values['contact_name']
         del values['contact_function']
