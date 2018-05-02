@@ -35,7 +35,7 @@ class ImportPartnerSupplier(models.TransientModel):
             elif v == 'False':
                 values[k] = False
 
-        if values['zip']:
+        if values['zip'] and values['country'] is 'ES':
             values['zip'] = values['zip'].zfill(5)
 
         return values
@@ -158,10 +158,11 @@ class ImportPartnerSupplier(models.TransientModel):
             if currency_obj:
                 pricelist_obj = self.env['product.pricelist'].search([(
                     'currency_id', '=', currency_obj.id)])
-                partner_data.update({
-                    # We expect that there's only one pricelist per currency
-                    'property_product_pricelist': pricelist_obj[0].id,
-                })
+                if pricelist_obj:
+                    partner_data.update({
+                        # We get the first pricelist per currency
+                        'property_product_pricelist': pricelist_obj[0].id,
+                    })
         del values['currency']
 
         # Assign fiscal position
@@ -186,28 +187,40 @@ class ImportPartnerSupplier(models.TransientModel):
                 for contact in contact_obj:
                     if contact.parent_id.unique_code == values['unique_code']:
                         partner_data.update({
-                            'child_ids': [(1, contact.id, {
-                                'function': values['contact_function'],
-                                'email': values['contact_email'],
-                                'mobile': values['contact_mobile'],
-                            })],
-                        })
+                                'child_ids': [(1, contact.id, {
+                                    'function': values['contact_function'],
+                                    'email': values['contact_email'],
+                                    'mobile': values['contact_mobile'],
+                                    })],
+                            })
                         new_contact = False
                         break
             if new_contact:
                 partner_data.update({
-                    'child_ids': [(0, 0, {
-                        'name': values['contact_name'],
-                        'function': values['contact_function'],
-                        'email': values['contact_email'],
-                        'mobile': values['contact_mobile'],
-                    })],
-                })
+                        'child_ids': [(0, 0, {
+                            'name': values['contact_name'],
+                            'function': values['contact_function'],
+                            'email': values['contact_email'],
+                            'mobile': values['contact_mobile'],
+                            })],
+                    })
 
         del values['contact_name']
         del values['contact_function']
         del values['contact_email']
         del values['contact_mobile']
+
+        # Select language for the client / supplier
+        if values['language']:
+            language_obj = self.env[
+                'res.lang'].search([
+                    ('iso_code', '=', values['language'])])
+            if language_obj:
+                partner_data.update({
+                    'lang': language_obj.code,
+                })
+
+        del values['language']
 
         return partner_data
 
