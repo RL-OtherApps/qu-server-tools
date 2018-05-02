@@ -1,0 +1,19 @@
+unique_code,name,comercial,is_company,street,street2,zip,city,state,country,language,currency,category_id,phone,mobile,email,website,vat,supplier,customer,payment_mode,payment_term,iban,fiscal_position,contact_name,contact_function,contact_email,contact_mobile
+(codigo único,(nombre empresa),(nombre fiscal),(Si es compañía:,(dirección 1),(dirección 2),(código postal),(ciudad),(estado / provincia,(código ISO del ,(Idioma del contacto ,(moneda para,(Categoria de cliente),(tel. Fijo),(tel. Móvil),(Email),(Web),(NIF ,(Si es proveedor ,(Si es cliente ,(Tipo de pago: ,(Plazo de pago:,(Ejemplo de IBAN:,(Posicion fiscal,(Si es una ,(La función dentro,(Su correo electrónico,(Su teléfono
+ para identificar,,,"True, si no: False)",,,,,Por ej.: ,país de 2 letras,con el que se imprimiran,compra en ,,,,,,Por ej.:,"indicar True,","indicar True,",Indicar nombre ,Indicar nombre ,ES6621000418401234567891),Poner nombre tal y como,compañía se le ,de la empresa,de contacto ,móvil
+ cada cliente),,,,,,,,"Barcelona,",en mayúscula.,"las facturas, etc.",proveedor:,,,,,,ESB13589049),si no False),si no False),como está en Odoo.,como está en Odoo.,,está en Odoo.,puede añadir un,(opcional)),(opcional)),(opcional))
+,,,,,,,,Kentucky),"Por ej,:",Introducir código ISO,Indicar con código ISO,,,,,,,,,"Tarjeta, Transferencia,",Por ej.:,,Por ej.:,"contacto, indicando",,,
+,,,,,,,,,"ES (España),",tal como está en Odoo.,Por ej.:,,,,,,,,,"Efectivo, Pagaré)","15 Días, 30 Días,",,"Recargo de Equivalencia,",el nombre),,,
+,,,,,,,,,"GB (Reino Unido),",Por ej.:,"EUR (Euro),",,,,,,,,,,Pago inmediato),,Retención IRPF 15%),,,,
+,,,,,,,,,CN (China)),es (Español),USD (Dólar americano)),,,,,,,,,,,,,,,,
+,,,,,,,,,,zh_CN (Chino),,,,,,,,,,,,,,,,,
+ Datos de ejemplo:,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,
+43000002,EMPRESA MUY BUENA S.A.,,True,1250 Bayhill Drive Suite 315,,94066,San Bruno,,,,,Profesional,,,abc@test.com,www.test.com,DE160705175,False,True,,30 días,ES5420130805320200035284,,,,,
+43000003,Xavier Jimenez,Xavi,False,Carrera 97B #42-41,,8291,Cali,,,,,Profesional,935471227,670896318,xavier.jimenez@qubiq.es,www.test.com,DE174484417,False,True,,30 días,,,Xavi 2,,xavier.jimenez@qubiq.es,
+43000004,Sergi Oliva,Sergi ,False,Talackerstrasse 53a,,8152,Glattpark,,,,,Profesional,935471228,670896319,sergi.oliva@qubiq.es,www.test.com,DE248376956,False,True,,15 días,DE08100208900028651678,,Sergi 2,Tester,sergi.oliva@qubiq.es,
+43000005,Test1,Testing Corporation,False,Calle Falsa,123,8150,Parets,Barcelona,DE,de,,Tester,935471229,670896320,Testing@123.com,,,False,,Tarjeta,Inmediato,ES6901821797380201740464,,,,,
+43000006,OCA,OCA ,True,prueba st,odoo st,8024,Barcelona,Testing,ES,en,USD,Profesional,935471230,670896321,testing11@a.cm,,,False,True,Transferencia,Pago inmediato,ES0600493405382094125185,Retención IRPF 15%,Hola,gerente,,
+43000007,Odoo,Odoo,True,prueba st,odoo st,8100,Barcelona,Barcelona,FR,fr,EUR,Supervisor,935471230,670896321,testing11@a.cm,,,False,True,Transferencia,60 Días,ES0600493405382094125185,Extracomunitario,,,,
+43000008,Gainax,Gainax,True,Musashino ,,8150,Musashino,Tokyo,JP,ja,JPY,Profesional,935625410,647789512,test@a.com,www.gainax.com,ESB13589049,True,True,Transferencia,15 Días,ES6621000418401234567891),Retención IRPF 19%,Takeshi,Empleado,asdf@s1.com,653765212
+43000009,QubiQ,QubiQ SL,True,Carrer Pamplona,92,8123,Barcelona,Barcelona,ES,es,EUR,Profesional,935700014,647778899,info@qubiq.com,www.qubiq.es,,True,True,Transferencia,Pago inmediato,ES53 0144 9943 0781 2190 1718,"Recargo de Equivalencia,",Alex,gerente,sergi.oliva@qubiq.es,647718634
