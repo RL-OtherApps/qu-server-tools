@@ -3,10 +3,10 @@
    :alt: License: AGPL-3
 
 ==============
-Import Partner Supplier
+Import Product
 ==============
 
-This module allows you to import a list of partners and suppliers using a .csv file.
+This module allows you to import product templates using a .csv file.
 
 Installation
 ============
@@ -28,7 +28,7 @@ Usage
 To use this module, you need to:
 
 #. Create a .csv file following the template available on this module.
-#. Go to Sales > Configuration > Import partners / suppliers.
+#. Go to Sales > Configuration > Import product.
 #. Import the .csv and that's it.
 
 
