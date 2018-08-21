@@ -1,0 +1,16 @@
+move_id,account,unique_code,name,debit,credit,date_maturity
+(ID del asiento,(Código de la cuenta,(Código único,(Etiqueta del asiento),(Debe),(Haber),(Fecha vencimiento)
+ creado en Odoo), contable), usado en la importación,,,,
+,, de partners),,,,
+,,,,,,
+,,,,,,
+4,100000,,Asiento de apertura 2018,,"5678,9",2018-08-31
+4,112000,,Asiento de apertura 2018,,"613,76",2018-09-01
+4,350000,,Asiento de apertura 2018,,49,2018-09-02
+4,400000,28,Asiento de apertura 2018,"3378,98",,2018-09-03
+4,410000,30,Asiento de apertura 2018,"4234,1",,2018-09-04
+4,410000,32,Asiento de apertura 2018,2145,,2018-09-05
+4,430000,38,Asiento de apertura 2018,,2346,2018-09-06
+4,430000,40,Asiento de apertura 2018,,"999,99",2018-09-07
+4,560000,,Asiento de apertura 2018,,12,2018-09-08
+4,700000,,Asiento de apertura 2018,,"58,43",2018-09-09
