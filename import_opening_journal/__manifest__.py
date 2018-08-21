@@ -4,7 +4,7 @@
 {
     "name": "Import Opening Journal",
     "summary": "Import opening journal",
-    "version": "11.0.1.0.0",
+    "version": "11.0.1.0.1",
     "category": "Invoicing",
     "website": "https://www.qubiq.es",
     "author": "QubiQ",
@@ -20,6 +20,6 @@
         "account",
     ],
     "data": [
-        "wizard/import_opening_journal.xml",
+        "wizards/import_opening_journal.xml",
     ],
 }
