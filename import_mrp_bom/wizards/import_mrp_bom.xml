@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Import mrp production wizard form -->
+    <record id="view_import_mrp_bom" model="ir.ui.view">
+        <field name="name">import.mrp.bom.form</field>
+        <field name="model">import.mrp.bom</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Import MRP production">
+                <group colspan="4" col="4">
+                    <field name="name" />
+                    <field name="delimeter"/>
+                </group>
+                <group>
+                    <field name="data" filename="name"/>
+                </group>
+                <separator colspan="4"/>
+                <footer>
+                    <button name="action_import" string="Import" type="object" class="oe_highlight"/>
+                    <button special="cancel" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_import_mrp_bom" model="ir.actions.act_window">
+        <field name="name">Import MRP production</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">import.mrp.bom</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_import_mrp_bom"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_definition_import_mrp_bom" sequence="99"
+        parent="mrp.menu_mrp_configuration" action="action_import_mrp_bom"/>
+
+</odoo>

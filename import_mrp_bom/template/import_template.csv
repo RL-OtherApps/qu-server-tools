@@ -1,0 +1,13 @@
+code,product_tmpl,tmpl_qty,product_comp,comp_qty
+(Nombre o referencia,(Código del producto a fabricar),(Cantidad a fabricar),(Código del material a usar),(Cantidad del manterial)
+ de la lista de materiales),,,,
+,,,,
+,,,,
+,,,,
+BOM1,prueba,1,component1,1
+BOM1,prueba,1,component2,3
+BOM1,prueba,1,component3,1
+BOM2,prueba2,3,component1,5
+BOM3,prueba3,2,component4,4
+BOM3,prueba3,2,component5,1
+BOM4,prueba4,1,component3,2
