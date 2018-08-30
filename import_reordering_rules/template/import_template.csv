@@ -1,0 +1,15 @@
+product,product_min_qty,product_max_qty
+(Referencia,(Cantidad mínima),(Cantidad máxima)
+ del producto de la regla,,
+ de abastecimiento),,
+,,
+,,
+1111111,60,100
+1111112,100,200
+1111113,25,50
+1111114,125,150
+1111115,80,160
+1111116,150,300
+1111117,400,800
+1111118,300,600
+1111119,300,400

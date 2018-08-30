@@ -14,6 +14,7 @@ addon | version | summary
 [import_opening_journal](import_opening_journal/) | 11.0.1.0.1 | Import opening journal
 [import_partner_supplier](import_partner_supplier/) | 11.0.1.0.0 | Import partners and suppliers
 [import_product](import_product/) | 11.0.1.0.0 | Import product templates
+[import_reordering_rules](import_reordering_rules/) | 11.0.1.0.0 | Import reordering rules
 [qu_iban_converter](qu_iban_converter/) | 11.0.1.0.0 | Wizard for CCC to IBAN massive conversion on bank accounts
 
 [//]: # (end addons)
