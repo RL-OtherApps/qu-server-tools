@@ -16,5 +16,6 @@ addon | version | summary
 [import_product](import_product/) | 11.0.1.0.0 | Import product templates
 [import_reordering_rules](import_reordering_rules/) | 11.0.1.0.0 | Import reordering rules
 [qu_iban_converter](qu_iban_converter/) | 11.0.1.0.0 | Wizard for CCC to IBAN massive conversion on bank accounts
+[vertical_margin_info](vertical_margin_info/) | 11.0.1.0.0 | Write vertical information on the left reports margin
 
 [//]: # (end addons)

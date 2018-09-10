@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2018 Qubiq <info@qubiq.es>
+    License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+    <template id="external_layout_background" inherit_id="web.external_layout_background">
+        <xpath expr="//div[@class='article o_report_layout_background']" position="inside">
+        	<div class="col-xs-12 text-center" style="-webkit-transform:rotate(270deg); margin-left: -456px; white-space: nowrap;">
+        		<span t-field="company.report_margin_text"/>
+        	</div>
+        </xpath>
+    </template>
+</odoo>

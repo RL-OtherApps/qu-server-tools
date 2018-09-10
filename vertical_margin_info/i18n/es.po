@@ -1,0 +1,40 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* vertical_margin_info
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-09-06 09:21+0000\n"
+"PO-Revision-Date: 2018-09-06 11:22+0200\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"Language: es\n"
+"X-Generator: Poedit 1.8.7.1\n"
+
+#. module: vertical_margin_info
+#: model:ir.model,name:vertical_margin_info.model_res_company
+msgid "Companies"
+msgstr "Compañías"
+
+#. module: vertical_margin_info
+#: model:ir.model,name:vertical_margin_info.model_res_partner
+msgid "Contact"
+msgstr "Contacto"
+
+#. module: vertical_margin_info
+#: code:addons/vertical_margin_info/models/res_company.py:11
+#: model:ir.model.fields,field_description:vertical_margin_info.field_res_company_report_margin_text
+#, python-format
+msgid "Text on left reports margin"
+msgstr "Texto en margen izquierdo de informes"
+
+#. module: vertical_margin_info
+#: model:ir.model.fields,help:vertical_margin_info.field_res_company_report_margin_text
+msgid "Write vertical information on the left reports margin"
+msgstr "Escribe información en vertical en el margen izquierdo de los informes"
