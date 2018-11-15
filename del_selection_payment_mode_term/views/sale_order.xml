@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Xavier Piernas <xavier.piernas@qubiq.es>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="del.selection_view_order_form" model="ir.ui.view">
+        <field name="name">del.selection.view.order.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="account_payment_sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <field name="payment_mode_id" position="attributes">
+                <attribute name="widget"></attribute>
+                <attribute name="options">{'no_open': True, 'no_create': True}</attribute>
+            </field>
+        </field>
+    </record>
+</odoo>
