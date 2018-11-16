@@ -24,11 +24,6 @@ def post_init_hook(cr, registry):
         ]).id
     })
     sql_view_id.bi_sql_view_field_ids.filtered(
-        lambda x: x.name == 'x_prestashop_id'
-    ).write({
-        'ttype': 'char'
-    })
-    sql_view_id.bi_sql_view_field_ids.filtered(
         lambda x: x.name == 'x_diario_venta'
     ).write({
         'ttype': 'many2one',
