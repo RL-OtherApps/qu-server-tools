@@ -18,5 +18,6 @@ addon | version | summary
 [del_selection_payment_mode_term](del_selection_payment_mode_term/) | 11.0.1.0.0 | Avoids creating and editing on payment mode and payment term and removes the selection widget
 [qu_iban_converter](qu_iban_converter/) | 11.0.1.0.0 | Wizard for CCC to IBAN massive conversion on bank accounts
 [vertical_margin_info](vertical_margin_info/) | 11.0.1.0.0 | Write vertical information on the left reports margin
+[pos_invoice_sql_view](pos_invoice_sql_view/) | 11.0.1.0.0 | Creates an SQL view from invoices and POS data
 
 [//]: # (end addons)
