@@ -4,14 +4,24 @@
 <odoo>
     <data>
 		<record id="sql_view_todas" model="bi.sql.view">
-			<field name="name">ventas</field>	
+			<field name="name">ventas</field>
 			<field name="technical_name">todas</field>
 			<field name="view_name">x_bi_sql_view_todas</field>
 			<field name="view_order">pivot,graph,tree</field>
 			<field name="is_materialized">True</field>
 			<field name="query">
 				select 	ail.product_id x_producto, pt.type x_tipo,
-					ail.quantity x_cantidad, ail.price_unit x_price_unit, trunc(ail.quantity*ail.price_unit*(1-ail.discount/100.0),4) as x_amount_untaxed,
+					case
+						when ai.type = 'out_refund' then ail.quantity * -1.0
+						else ail.quantity
+					end
+					as x_cantidad,
+					ail.price_unit x_price_unit,
+					case
+						when ai.type = 'out_refund' then trunc(ail.quantity*-1.0*ail.price_unit*(1-ail.discount/100.0),4)
+						else trunc(ail.quantity*ail.price_unit*(1-ail.discount/100.0),4)
+					end
+					as x_amount_untaxed,
 					ai.date_invoice x_fecha, ai.journal_id x_diario_venta, apm.name x_diario_pago
 				from account_invoice ai
 				left join account_invoice_line ail on ail.invoice_id = ai.id
