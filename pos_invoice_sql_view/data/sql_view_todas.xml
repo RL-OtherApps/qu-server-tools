@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Xavier Piernas <xavier.piernas@qubiq.es>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <data>
+		<record id="sql_view_todas" model="bi.sql.view">
+			<field name="name">ventas</field>
+			<field name="technical_name">todas</field>
+			<field name="view_name">x_bi_sql_view_todas</field>
+			<field name="view_order">pivot,graph,tree</field>
+			<field name="is_materialized">True</field>
+			<field name="query">
+				select 	ail.product_id x_producto, pt.type x_tipo,
+					case
+						when ai.type = 'out_refund' then ail.quantity * -1.0
+						else ail.quantity
+					end
+					as x_cantidad,
+					ail.price_unit x_price_unit,
+					case
+						when ai.type = 'out_refund' then trunc(ail.quantity*-1.0*ail.price_unit*(1-ail.discount/100.0),4)
+						else trunc(ail.quantity*ail.price_unit*(1-ail.discount/100.0),4)
+					end
+					as x_amount_untaxed,
+					ai.date_invoice x_fecha, ai.journal_id x_diario_venta, apm.name x_diario_pago
+				from account_invoice ai
+				left join account_invoice_line ail on ail.invoice_id = ai.id
+				left join account_payment_mode apm on ai.payment_mode_id = apm.id
+				left join product_product pp on pp.id = ail.product_id
+				left join product_template pt on pt.id = pp.product_tmpl_id
+				where ai.type in ('out_invoice', 'out_refund')
+				UNION ALL
+				select 	pol.product_id x_producto, pt.type x_tipo,
+					pol.qty x_cantidad, pol.price_unit x_price_unit, trunc(pol.qty*pol.price_unit*(1-pol.discount/100.0),4) as x_amount_untaxed,
+					po.date_order x_fecha, po.sale_journal x_diario_venta, MIN(aj.name) x_diario_pago
+				from pos_order po
+				left join account_bank_statement_line absl on absl.pos_statement_id = po.id
+				left join account_journal aj on absl.journal_id = aj.id
+				left join pos_order_line pol on pol.order_id = po.id
+				left join product_product pp on pp.id = pol.product_id
+				left join product_template pt on pt.id = pp.product_tmpl_id
+				where po.invoice_id is null
+				group by x_producto, x_tipo, x_price_unit, x_cantidad, x_fecha, x_diario_venta, x_amount_untaxed
+			</field>
+        </record>
+    </data>
+</odoo>

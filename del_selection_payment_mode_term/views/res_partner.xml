@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Xavier Piernas <xavier.piernas@qubiq.es>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="del_selection_view_partner_property_form_term" model="ir.ui.view">
+        <field name="name">del.selection.view.partner.property.form.term</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="account.view_partner_property_form"/>
+        <field name="arch" type="xml">
+            <field name="property_payment_term_id" position="attributes">
+                <attribute name="widget"></attribute>
+                <attribute name="options">{'no_open': True, 'no_create': True}</attribute>
+            </field>
+        </field>
+    </record>
+    <record id="del_selection_view_partner_property_form_mode" model="ir.ui.view">
+        <field name="name">del.selection.view.partner.property.form.mode</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="account_payment_partner.view_partner_property_form"/>
+        <field name="arch" type="xml">
+            <field name="customer_payment_mode_id" position="attributes">
+                <attribute name="widget"></attribute>
+                <attribute name="options">{'no_open': True, 'no_create': True}</attribute>
+            </field>
+        </field>
+    </record>
+</odoo>
