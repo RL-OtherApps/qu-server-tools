@@ -18,6 +18,7 @@
         "base",
         # Add the modules that creates the models to import
     ],
+
     "data": [
         "wizards/import_master_data.xml",
     ],
