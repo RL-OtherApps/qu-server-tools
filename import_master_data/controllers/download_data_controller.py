@@ -17,7 +17,7 @@ class DownloadXMLMasterData(http.Controller):
         :param str xml_string: xml file as string
     '''
     @http.route('/web/binary/download_data', type='http', auth="public")
-    def download_xml_master_data(self, filename, model_id):
+    def download_xml_master_data(self, filename, model_id, **kwargs):
         master_data_obj = request.env['import.master.data'].sudo().search_read(
             [('id', '=', int(model_id))], ["xml_file"])
         if master_data_obj:

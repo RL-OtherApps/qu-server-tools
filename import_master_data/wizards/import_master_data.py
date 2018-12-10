@@ -10,9 +10,6 @@ from io import StringIO
 from lxml import etree
 from lxml import builder
 
-import logging
-_logger = logging.getLogger(__name__)
-
 
 class ImportMasterData(models.TransientModel):
     _name = 'import.master.data'
@@ -29,6 +26,11 @@ class ImportMasterData(models.TransientModel):
         string='Model',
         required=True,
     )
+    key_field_id = fields.Many2one(
+        'ir.model.fields',
+        string='Key field',
+        help='Field used to generate XML ID',
+    )
     xml_file = fields.Binary(string='XML File')
 
     '''
@@ -40,7 +42,12 @@ class ImportMasterData(models.TransientModel):
     '''
     def csv_row_to_xml(self, root, values, counter):
         model = self.model_id.model
-        record_id = model.replace(".", "_") + '_data' + str(counter)
+        record_id = model.replace(".", "_") + '_data'
+        if self.key_field_id:
+            record_id = record_id + values[self.key_field_id.name]
+        else:
+            record_id = record_id + str(counter)
+
         record = etree.SubElement(root, "record", id=record_id, model=model)
 
         for field in values.keys():
@@ -81,6 +88,7 @@ class ImportMasterData(models.TransientModel):
 
         del reader_info[0]
         values = {}
+
         counter = 1
 
         # Start XML Tree

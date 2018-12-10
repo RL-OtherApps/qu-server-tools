@@ -3,7 +3,7 @@
 {
     "name": "Import Master Data",
     "summary": "Import master data files and download them as .xml",
-    "version": "11.0.1.0.1",
+    "version": "11.0.2.0.1",
     "category": "Import",
     "website": "https://www.qubiq.es",
     "author": "QubiQ",
@@ -19,7 +19,6 @@
         # Add the modules that creates the models to import
     ],
     "data": [
-        "data/mylva_contact_position_data.xml",
         "wizards/import_master_data.xml",
     ],
 }
