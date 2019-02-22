@@ -11,7 +11,7 @@ class AcquirerRedsys(models.Model):
     @api.multi
     def redsys_form_generate_values(self, values):
         tx_obj = self.env['payment.transaction'].search([
-            ('reference', '=', values['reference'])
+            ('reference', '=', values['reference']),
             ('state', 'not in', ('refunded', 'done'))
         ])
         if tx_obj:
