@@ -15,7 +15,7 @@ class AcquirerRedsys(models.Model):
             ('state', 'not in', ('refunded', 'done'))
         ])
         if tx_obj:
-            now = datetime.datetime.now().strftime("%H%M%S%d%m%Y")
+            now = datetime.datetime.now().strftime("%M%S")
             reference = tx_obj.sale_order_id.name + now
             tx_obj.write({'reference': reference})
             values.update({'reference': reference})
