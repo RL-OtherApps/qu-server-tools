@@ -11,14 +11,23 @@ class AcquirerRedsys(models.Model):
     @api.multi
     def redsys_form_generate_values(self, values):
         tx_obj = self.env['payment.transaction'].search([
-            ('reference', '=', values['reference']),
-            ('state', 'not in', ('refunded', 'done'))
+            ('reference', '=', values['reference'])
         ])
         if tx_obj:
-            now = datetime.datetime.now().strftime("%M%S")
-            reference = tx_obj.sale_order_id.name + now
+            reference = self.env['ir.sequence'].next_by_code('payment.transaction')
             tx_obj.write({'reference': reference})
             values.update({'reference': reference})
 
         res = super(AcquirerRedsys, self).redsys_form_generate_values(values)
         return res
+    
+    
+class PaymentTransaction(models.Model):
+    _inherit = 'payment.transaction'
+
+    def _confirm_so(self):
+        if self.state == 'pending'  and self.sale_order_id.state == 'draft':
+            _logger.info('<%s> transaction not processed for order %s (ID %s)', self.acquirer_id.provider, self.sale_order_id.name, self.sale_order_id.id)
+            return False
+        else:
+            return super(PaymentTransaction,self)._confirm_so()
