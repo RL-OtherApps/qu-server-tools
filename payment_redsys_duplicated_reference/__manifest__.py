@@ -12,6 +12,7 @@
         'payment_redsys',
     ],
     "data": [
+        'data/sequence.xml',
     ],
     'application': False,
     'installable': True,
