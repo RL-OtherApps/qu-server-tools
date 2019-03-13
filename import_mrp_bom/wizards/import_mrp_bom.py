@@ -34,22 +34,31 @@ class ImportMrpBom(models.TransientModel):
     def _assign_product_data(self, values):
         # Search for the manufactured product
         if values['product_tmpl']:
-            product_tmpl = self.env['product.template'].search([(
-                'default_code', '=', values['product_tmpl'])])
+            product_tmpl = self.env['product.template'].with_context(
+                    active_test=False).search([(
+                        'default_code', '=', values['product_tmpl'])])
             if product_tmpl:
                 values.update({
                     'product_tmpl': product_tmpl.id,
                 })
+            else:
+                values.update({
+                    'product_tmpl': False,
+                })
 
         # Search for the component product
         if values['product_comp']:
-            product_comp = self.env['product.product'].search([(
-                'default_code', '=', values['product_comp'])])
+            product_comp = self.env['product.product'].with_context(
+                    active_test=False).search([(
+                        'default_code', '=', values['product_comp'])])
             if product_comp:
                 values.update({
                     'product_comp': product_comp.id,
                 })
-
+            else:
+                values.update({
+                    'product_comp': False,
+                })
         return values
 
     '''
@@ -66,21 +75,22 @@ class ImportMrpBom(models.TransientModel):
             'product_qty': updated_values['comp_qty'],
         }
 
-        if mrp_bom_obj:
-            mrp_bom_obj.write({
-                'bom_line_ids': [(0, 0, line_values)]
-            })
-            _logger.info(
-                "Adding component line for BOM: %s", values['code'])
-        else:
-            mrp_bom_obj.create({
-                'code': updated_values['code'],
-                'product_tmpl_id': updated_values['product_tmpl'],
-                'product_qty': updated_values['tmpl_qty'],
-                'bom_line_ids': [(0, 0, line_values)]
-            })
-            _logger.info(
-                "Creating BOM: %s", values['code'])
+        if values['product_comp'] and values['product_tmpl']:
+            if mrp_bom_obj:
+                mrp_bom_obj.write({
+                    'bom_line_ids': [(0, 0, line_values)]
+                })
+                _logger.info(
+                    "Adding component line for BOM: %s", values['code'])
+            else:
+                mrp_bom_obj.create({
+                    'code': updated_values['code'],
+                    'product_tmpl_id': updated_values['product_tmpl'],
+                    'product_qty': updated_values['tmpl_qty'],
+                    'bom_line_ids': [(0, 0, line_values)]
+                })
+                _logger.info(
+                    "Creating BOM: %s", values['code'])
 
     '''
         Function to read the csv file and convert it to a dict.
