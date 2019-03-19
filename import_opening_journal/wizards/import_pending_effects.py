@@ -3,7 +3,6 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from odoo import fields, models, exceptions, _
-from datetime import datetime
 
 import base64
 import csv
