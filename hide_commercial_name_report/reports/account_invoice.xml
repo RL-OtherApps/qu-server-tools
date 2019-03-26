@@ -8,7 +8,12 @@
     	</xpath>
     	<xpath expr="//t[@t-set='address']" position="after">
     		<t t-set="address">
-    			<span t-field="o.partner_id.name"/>
+                <div>
+                    <t t-if="o.partner_id.parent_id">
+                        <span t-field="o.partner_id.parent_id.name"/>,
+                    </t>
+                    <span t-field="o.partner_id.name"/>
+                </div>
     			<address t-field="o.partner_id" t-options="{'widget': 'contact', 'fields': ['address'], 'no_marker': True}"/>
     			<div t-if="o.partner_id.vat" class="mt16"><t t-esc="o.company_id.country_id.vat_label or 'Tax ID'"/>: <span t-field="o.partner_id.vat"/></div>
     		</t>

@@ -7,7 +7,34 @@
     		<attribute name="t-options">{'widget': 'contact', 'fields': ['address'], 'no_marker': True}</attribute>
     	</xpath>
         <xpath expr="//t[@t-set='address']/div[@t-field='doc.partner_id']" position="before">
-            <span t-field="doc.partner_id.name"/>
+        	<div>
+                <t t-if="doc.partner_id.parent_id">
+                    <span t-field="doc.partner_id.parent_id.name"/>,
+                </t>
+                <span t-field="doc.partner_id.name"/>
+            </div>
+        </xpath>
+        <xpath expr="//div[@t-field='doc.partner_shipping_id']" position="attributes">
+        	<attribute name="t-options">{'widget': 'contact', 'fields': ['address', 'phone'], 'no_marker': True}</attribute>
+        </xpath>
+        <xpath expr="//div[@t-field='doc.partner_shipping_id']" position="before">
+        	<div>
+                <t t-if="doc.partner_shipping_id.parent_id">
+                    <span t-field="doc.partner_shipping_id.parent_id.name"/>,
+                </t>
+                <span t-field="doc.partner_shipping_id.name"/>
+            </div>
+        </xpath>
+        <xpath expr="//div[@t-field='doc.partner_invoice_id']" position="attributes">
+        	<attribute name="t-options">{'widget': 'contact', 'fields': ['address', 'phone'], 'no_marker': True}</attribute>
+        </xpath>
+        <xpath expr="//div[@t-field='doc.partner_invoice_id']" position="before">
+        	<div>
+                <t t-if="doc.partner_invoice_id.parent_id">
+                    <span t-field="doc.partner_invoice_id.parent_id.name"/>,
+                </t>
+                <span t-field="doc.partner_invoice_id.name"/>
+            </div>
         </xpath>
     </template>
 </odoo>
