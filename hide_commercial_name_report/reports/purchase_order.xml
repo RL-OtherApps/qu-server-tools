@@ -8,8 +8,8 @@
     	</xpath>
         <xpath expr="//t[@t-set='address']/div[@t-field='o.partner_id']" position="before">
             <div>
-                <t t-if="o.partner_id.partner_id.parent_id">
-                    <span t-field="o.partner_id.partner_id.parent_id.name"/>,
+                <t t-if="o.partner_id.parent_id">
+                    <span t-field="o.partner_id.parent_id.name"/>,
                 </t>
                 <span t-field="o.partner_id.name"/>
             </div>
