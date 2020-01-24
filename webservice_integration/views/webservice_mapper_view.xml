@@ -58,6 +58,8 @@
                                             <field name="odoo_field" domain="[('model', '=', parent.odoo_model_name)]" options="{'no_create_edit': True}"/>
                                             <field name="source_field"/>
                                             <field name="unique"/>
+                                            <field name="search_operator" attrs="{'readonly': [('unique','=', False)]}"/>
+                                            <field name="create_method"/>
                                             <field name="state_valid" invisible='1'/>
                                             <field name="odoo_relation" invisible='1'/>
                                             <field name="field_type" invisible='1'/>

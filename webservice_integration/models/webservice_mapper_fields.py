@@ -133,39 +133,40 @@ class WebserviceMapperFields(models.Model):
     def search_record(self, value, many2many):
         """Search relation by name or by old id
         return the record or False"""
-        self.ensure_one()
-        model_id = self.env['ir.model'].search([
-            ('model', '=', self.odoo_relation)
-        ])
-        model_obj = self.env[self.odoo_relation]
+        model_obj = self.env['ir.model'].search([('model', '=',
+                                                  self.odoo_relation)])
+        if not model_obj:
+            raise UserError(_("Model %s not found!") % self.odoo_relation)
         field = self.env['ir.model.fields'].search_count([
-            ('model_id', '=', model_id.id),
-            ('name', '=', 'x_old_id')
-            ])
+            ('model_id', '=', model_obj.id), ('name', '=', 'x_old_id')
+        ])
         if field:
             if many2many:
                 domain = [('x_old_id', 'in', value)]
             else:
                 domain = [('x_old_id', '=', value[0])]
-            rec = model_obj.search(domain)
+            print(domain)
+            rec = self.env[self.odoo_relation].search(domain)
             if rec and many2many:
                 return rec
             if len(rec) == 1:
                 return rec
         if many2many:
             return False
-        field = self.env['ir.model.fields'].search_count([
-            ('model_id', '=', model_id.id),
-            ('name', '=', 'name')
-            ])
+        if (self.env['ir.model.fields'].search_count([
+            ('model_id', '=', model_obj.id), ('name', '=', 'display_name')
+        ])):
+            domain = []
+        elif (self.env['ir.model.fields'].search_count([
+            ('model_id', '=', model_obj.id), ('name', '=', 'name')
+        ])):
+            domain = [('name', '=', value[1])]
+        else:
+            field = False
         if field:
-
-            if value[1][-1] == ' ':
-                value[1] = value[1][:-1]
-            value[1] = self.transform_data(value[1])
-            rec = model_obj.search(
-                [('name', '=', value[1])]
-            )
+            rec = self.env[self.odoo_relation].search(domain)
+            if not domain and rec:
+                rec = rec.filtered(lambda x: x.display_name == value[1])
             if len(rec) == 1:
                 return rec
 

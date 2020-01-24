@@ -24,51 +24,42 @@ class WebserviceMapper(models.Model):
     ref_code = fields.Char(index=True, copy=False)
     sync_ids = fields.Char(string="Sync IDS",
                            help="select specific id or [ids] for sync")
-    dep_field_ids = fields.One2many(
-        comodel_name='webservice.mapper.fields', inverse_name='dependence_id')
+    dep_field_ids = fields.One2many(comodel_name='webservice.mapper.fields',
+                                    inverse_name='dependence_id')
     dep_mapper_id = fields.Many2one(
-        comodel_name='webservice.mapper', related='dep_field_ids.webservice_mapper_id')
+        comodel_name='webservice.mapper',
+        related='dep_field_ids.webservice_mapper_id')
     source_model = fields.Char(
-        help="Table name or model name if the source is odoo",
-        required=1)
+        help="Table name or model name if the source is odoo", required=1)
     odoo_model = fields.Many2one(
         comodel_name='ir.model',
-        help="Table name or model name if the source is odoo", required=True)
-    odoo_model_name = fields.Char(
-        related='odoo_model.model')
+        help="Table name or model name if the source is odoo",
+        required=True)
+    odoo_model_name = fields.Char(related='odoo_model.model')
     mapper_fields_ids = fields.One2many(
         comodel_name='webservice.mapper.fields',
         inverse_name='webservice_mapper_id',
         string='Mapper Fields',
         copy=True)
-    search_field = fields.Char(
-        help="""Fields used for search and use records
-        in the current odoo database"""
-    )
-    company_field = fields.Char(
-        help="Column name for company_id",
-        compute="_compute_company_field",
-        store=True, readonly=False
-    )
-    search_domain = fields.Char(
-        help="""Domain used for search and use records
-        in the source odoo database"""
-    )
-    priority = fields.Integer(
-        help="""Number between 0-99 to
+    search_field = fields.Char(help="""Fields used for search and use records
+        in the current odoo database""")
+    company_field = fields.Char(help="Column name for company_id",
+                                compute="_compute_company_field",
+                                store=True,
+                                readonly=False)
+    search_domain = fields.Char(help="""Domain used for search and use records
+        in the source odoo database""")
+    priority = fields.Integer(help="""Number between 0-99 to
                 set the order of execute""")
     method_calls = fields.Text(
         help="""Separate with ; the list of the method to use
-         after create the object"""
-    )
+         after create the object""")
     update = fields.Boolean(
         help="""When is activated the record will be overwrite
-         in case that it already exist""", default=True
-    )
+         in case that it already exist""",
+        default=True)
     create_active = fields.Boolean(
-        help="When is activated the record will be created",
-        default=True
-    )
+        help="When is activated the record will be created", default=True)
     hide_create_unique_field = fields.Boolean()
 
     result = fields.Text(string='')
@@ -78,8 +69,7 @@ class WebserviceMapper(models.Model):
         if not self.ref_code:
             num_2 = random.randint(10, 99)
             num = random.randint(100000, 999999)
-            ref_code = '%s_%s_%s' % (
-                self.odoo_model_name, num_2, num)
+            ref_code = '%s_%s_%s' % (self.odoo_model_name, num_2, num)
             self.write({'ref_code': ref_code})
         return self.ref_code
 
@@ -114,8 +104,10 @@ class WebserviceMapper(models.Model):
         return base64.encodestring(fp.getvalue()), self.name + '.csv'
 
     def format_get_dep_fields(self):
-        vals = [x.get_ref_code() for x in
-                self.dep_field_ids.mapped('webservice_mapper_id')]
+        vals = [
+            x.get_ref_code()
+            for x in self.dep_field_ids.mapped('webservice_mapper_id')
+        ]
         return '/'.join(vals)
 
     def get_export_mapper_data(self):
@@ -137,14 +129,15 @@ class WebserviceMapper(models.Model):
 
     def get_company_domain(self):
         if self.company_field:
-            return [(self.company_field, "=", self.webservice_id.company_id.id)]
+            return [(self.company_field, "=", self.webservice_id.company_id.id)
+                    ]
         return []
 
     @api.depends('odoo_model')
     def _compute_company_field(self):
         for rec in self:
             if rec.odoo_model.field_id.filtered(
-             lambda o: o.name == 'company_id'):
+                    lambda o: o.name == 'company_id'):
                 rec.company_field = "company_id"
             else:
                 rec.company_field = ""
@@ -192,9 +185,9 @@ class WebserviceMapper(models.Model):
         self.ensure_one()
         models, db, uid, password = self.webservice_id.\
             _get_models_webservice()
-        field_list = models.execute_kw(
-            db, uid, password, self.source_model, 'fields_get',
-            [], {'attributes': ['type']})
+        field_list = models.execute_kw(db, uid, password, self.source_model,
+                                       'fields_get', [],
+                                       {'attributes': ['type']})
         return field_list
 
     def _check_mapped_fields(self, field_list):
@@ -203,17 +196,21 @@ class WebserviceMapper(models.Model):
         for mapped_field in self.mapper_fields_ids:
             if mapped_field.source_field in field_list:
                 mapped_field.state_valid = 'valid'
-            elif (not mapped_field.source_field and
-                  mapped_field.odoo_field.name in field_list):
+            elif (not mapped_field.source_field
+                  and mapped_field.odoo_field.name in field_list):
                 mapped_field.write({
-                    'state_valid': 'valid',
-                    'source_field': mapped_field.odoo_field.name,
+                    'state_valid':
+                    'valid',
+                    'source_field':
+                    mapped_field.odoo_field.name,
                 })
-            elif (mapped_field.odoo_field.name[-3:] == '_id' and
-                  mapped_field.odoo_field.name[:-3] in field_list):
+            elif (mapped_field.odoo_field.name[-3:] == '_id'
+                  and mapped_field.odoo_field.name[:-3] in field_list):
                 mapped_field.write({
-                    'state_valid': 'valid',
-                    'source_field': mapped_field.odoo_field.name[:-3],
+                    'state_valid':
+                    'valid',
+                    'source_field':
+                    mapped_field.odoo_field.name[:-3],
                 })
             else:
                 mapped_field.state_valid = 'not_valid'
@@ -248,11 +245,10 @@ class WebserviceMapper(models.Model):
         for rec in self:
             if not rec.odoo_model:
                 raise UserError(_('You must select a Odoo Model'))
-            current_fields = rec.mapper_fields_ids.mapped(
-                'odoo_field').mapped('name')
+            current_fields = rec.mapper_fields_ids.mapped('odoo_field').mapped(
+                'name')
             required_fields = rec.odoo_model.field_id.filtered(
-                lambda f: f.required and
-                'company_id' not in f.name)
+                lambda f: f.required and 'company_id' not in f.name)
             mapper_field_obj = self.env['webservice.mapper.fields']
             for field in required_fields:
                 if current_fields and field.name in current_fields:
@@ -266,9 +262,7 @@ class WebserviceMapper(models.Model):
         res = {}
         for field in self.mapper_fields_ids:
             field.source_field = field.source_field or field.odoo_field.name
-            res.update({
-                field.source_field: field.odoo_field.name
-            })
+            res.update({field.source_field: field.odoo_field.name})
         return res
 
     def _get_search_domain(self):
@@ -291,14 +285,15 @@ class WebserviceMapper(models.Model):
                 if add_domain:
                     domain.append(add_domain)
                 try:
-                    res_list = models.execute_kw(
-                        db, uid, password, rec.source_model,
-                        'search_read', [domain], {'fields': ['id']}
-                    )
+                    res_list = models.execute_kw(db, uid, password,
+                                                 rec.source_model,
+                                                 'search_read', [domain],
+                                                 {'fields': ['id']})
                 except Exception:
-                    raise UserError(_("Error with domain used for search,"
-                                      " be sure you write the domain like:\n"
-                                      "['field','=','value']"))
+                    raise UserError(
+                        _("Error with domain used for search,"
+                          " be sure you write the domain like:\n"
+                          "['field','=','value']"))
 
                 for res in res_list:
                     rec.with_delay().sync_data(res['id'])
@@ -366,10 +361,9 @@ class WebserviceMapper(models.Model):
         else:
             domain = []
         mapped_fields = self.get_mapped_fields()
-        data_list = models.execute_kw(
-            db, uid, password, self.source_model,
-            'search_read', [domain], {'fields': list(mapped_fields.keys())}
-        )
+        data_list = models.execute_kw(db, uid, password, self.source_model,
+                                      'search_read', [domain],
+                                      {'fields': list(mapped_fields.keys())})
         self.result = '--DATA READ--\n %s' % str(data_list)
         return data_list, odoo_rec
 
@@ -391,8 +385,7 @@ class WebserviceMapper(models.Model):
             lambda x: x.odoo_relation)
         for dependence in dependences_ids:
             field_name = dependence.source_field
-            is_o2m = dependence.odoo_field.ttype in [
-                "one2many", "many2many"]
+            is_o2m = dependence.odoo_field.ttype in ["one2many", "many2many"]
             if not data_read.get(field_name, False):
                 continue
             # Search record values in the current database
@@ -406,16 +399,16 @@ class WebserviceMapper(models.Model):
                         continue
                     depen_vals = []
                     create_recs = [x for x in depen_recs if type(x) is dict]
-                    update_recs = [x for x in depen_recs if x
-                                   not in create_recs]
+                    update_recs = [
+                        x for x in depen_recs if x not in create_recs
+                    ]
                     if update_recs:
                         depen_vals.append((6, 0, [x.id for x in update_recs]))
                     for depen_rec in create_recs:
                         depen_vals.append((0, 0, depen_rec))
                     if dependence.unique:
-                        domain.append(
-                            (dependence.odoo_field.name,
-                             'in', [x.id for x in update_recs]))
+                        domain.append((dependence.odoo_field.name, 'in',
+                                       [x.id for x in update_recs]))
                 else:
                     value = dependence.dependence_id.sync_data(
                         res_id=res_values[0])
@@ -424,19 +417,17 @@ class WebserviceMapper(models.Model):
                     depen_vals = value[0].id
                     if dependence.unique:
                         domain.append(
-                            (dependence.odoo_field.name, '=', depen_vals)
-                        )
+                            (dependence.odoo_field.name, '=', depen_vals))
             else:
                 depen_ids = dependence.search_record(res_values, is_o2m)
                 if depen_ids:
-                    depen_vals = ([(6, 0, [x.id for x in depen_ids])] if is_o2m
-                                  else depen_ids.id)
+                    depen_vals = ([(6, 0, [x.id for x in depen_ids])]
+                                  if is_o2m else depen_ids.id)
                 else:
                     depen_vals = depen_ids
-            data_write.update({
-                dependence.odoo_field.name: depen_vals
-            })
+            data_write.update({dependence.odoo_field.name: depen_vals})
             data_read.pop(field_name)
+        data_write_after = {}
         # After read values search by unique values in current DB
         OR_domain = []
         if not odoo_rec:
@@ -444,30 +435,37 @@ class WebserviceMapper(models.Model):
                 if field_id.source_field not in data_read.keys():
                     continue
                 value = data_read[field_id.source_field]
-                if not value and field_id.odoo_field.ttype != "boolean":
+                if (not value and field_id.odoo_field.ttype not in
+                   ['boolean', 'integer', 'float']):
                     continue
                 if field_id.unique:
                     if field_id.search_operator == '|':
                         OR_domain += field_id.get_field_domain(value)
                     else:
                         domain += field_id.get_field_domain(value)
-                data_write.update({
-                    field_id.odoo_field.name: field_id.transform_data(value)})
+                if field_id.create_method == "after":
+                    data_write_after.update({
+                        field_id.odoo_field.name:
+                        field_id.transform_data(value)
+                    })
+                else:
+                    data_write.update({
+                        field_id.odoo_field.name:
+                        field_id.transform_data(value)
+                    })
         # Fill with company
         if self.company_field:
-            data_write.update({
-                self.company_field: self.webservice_id.company_id.id
-            })
-            domain += self.get_company_domain()
+            data_write.update(
+                {self.company_field: self.webservice_id.company_id.id})
+            domain += bool(domain) and self.get_company_domain() or []
         domain = ['|' for x in range(len(OR_domain) - 1)] + OR_domain + domain
         found = False
         # Delete None values
+        print(data_write)
         data_write = {k: v for k, v in data_write.items() if v is not None}
         # Get Default Values
         data_write = {**model_obj.default_get(data_write), **data_write}
         self.result += "\n----DATA WRITE----\n%s" % str(data_write)
-        if self.odoo_model_name == "account.move.line":
-            pass
         # Logica actualizacion
         if not odoo_rec and domain:
             odoo_rec = model_obj.search(domain)
@@ -487,4 +485,6 @@ class WebserviceMapper(models.Model):
                         getattr(odoo_rec, method)()
                     except Exception as err:
                         _logger.info('Error with calling method %s' % err)
+        if data_write_after:
+            odoo_rec.sudo().write(data_write_after)
         return odoo_rec[0]

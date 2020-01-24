@@ -38,9 +38,24 @@ class ImportMappers(models.TransientModel):
             ('model', '=', model),
         ])
         if not field_id:
-            _logger.info('Field %s from model %s not found' %
-                         (field_val['odoo_field'], model))
-            return None
+            if field_val['odoo_field'] == "x_old_id":
+                model_obj = self.env['ir.model'].search([
+                    ('model', '=', model)
+                ]),
+                field_id = field_id.sudo().create({
+                    'name': 'x_old_id',
+                    'field_description': 'Old ID',
+                    'model': model,
+                    'model_id': model_obj[0].id,
+                    'ttype': 'integer',
+                    'store': True,
+                    'index': True,
+                    'state': 'manual'
+                })
+            else:
+                raise UserError('Field %s from model %s not found' %
+                                (field_val['odoo_field'], model))
+                return None
         field_val['odoo_field'] = field_id.id
         if field_val['dependence_ref'] != 'False':
             mapper_id = self.search_mapper(field_val['dependence_ref'])
@@ -48,7 +63,11 @@ class ImportMappers(models.TransientModel):
                 field_val['dependence_id'] = mapper_id.id
         field_val.pop('dependence_ref')
         field_val['unique'] = eval(field_val['unique'])
-        return mapper_field_obj.create(field_val)
+        mapper_field_obj = mapper_field_obj.create(field_val)
+        if field_val['create_method'] != "together":
+            mapper_field_obj.write(
+                {'create_method': field_val['create_method']})
+        return mapper_field_obj
 
     def create_mapper(self, mapper_vals, fields_vals):
         """mapper_vals is a dict and fields_vals is a list of dict"""
@@ -71,7 +90,6 @@ class ImportMappers(models.TransientModel):
         mapper_vals['update'] = eval(mapper_vals['update'])
         mapper_id = mapper_obj.create(mapper_vals)
         # CREATE FIELDS
-
         for field_val in fields_vals:
             mapper_id.mapper_fields_ids += self.create_field(
                 mapper_id.odoo_model_name, field_val

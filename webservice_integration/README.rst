@@ -16,19 +16,14 @@ Configuration
 
 To configure this module, you need to:
 
-#. Join users to webservice manager group.
-#. Set up connection data and test it.
-#. Set up mappers of fields download at `Drive <https://drive.google.com/open?id=1u9y-NFM8mTJpHUDtMz2GwZVJhyJXrqb_>`_
-
+#. Go to company, activate Synchronize data
+#. Set connection data
 
 
 Known issues / Roadmap
 ======================
 
-* Create Unit test
-* Add "after" create method in order to load data after the creation of the object
-* Better documentation
-* Creation of mappers templates
+* ...
 
 
 Bug Tracker
@@ -61,4 +56,3 @@ Maintainer
 This module is maintained by QubiQ.
 
 To contribute to this module, please visit https://github.com/QubiQ.
-
