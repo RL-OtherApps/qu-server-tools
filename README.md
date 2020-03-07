@@ -16,5 +16,6 @@ addon | version | summary
 [import_partner_supplier](import_partner_supplier/) | 12.0.1.0.0 | Import partners and suppliers
 [import_product](import_product/) | 12.0.1.0.0 | Import product templates
 [remove_report_background](remove_report_background/) | 12.0.1.0.0 | Remove the background decoration of your reports
+[webservice_integration](webservice_integration/) | 12.0.2.0.0 | Using Odoo Webservice for ETL purporses
 
 [//]: # (end addons)
