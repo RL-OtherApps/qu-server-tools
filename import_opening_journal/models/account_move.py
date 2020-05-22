@@ -16,7 +16,7 @@ class AccountMove(models.Model):
     def post(self, invoice=False):
         for move in self:
             move.assert_balanced(force=True)
-        return super(AccountMove, self).post()
+        return super(AccountMove, self).post(invoice=invoice)
 
     """
     Function overrited, otherwise you can't change amounts
