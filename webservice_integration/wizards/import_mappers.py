@@ -61,6 +61,7 @@ class ImportMappers(models.TransientModel):
             mapper_id = self.search_mapper(field_val['dependence_ref'])
             if mapper_id:
                 field_val['dependence_id'] = mapper_id.id
+            field_val['dependence_ref_code'] = field_val['dependence_ref']
         field_val.pop('dependence_ref')
         field_val['unique'] = eval(field_val['unique'])
         mapper_field_obj = mapper_field_obj.create(field_val)
@@ -71,18 +72,20 @@ class ImportMappers(models.TransientModel):
 
     def create_mapper(self, mapper_vals, fields_vals):
         """mapper_vals is a dict and fields_vals is a list of dict"""
+
+        exist_mapper = self.search_mapper(mapper_vals['ref_code'])
+        if exist_mapper:
+            return exist_mapper
         # OBJECTS AND DATA NEEDED
         mapper_obj = self.env['webservice.mapper']
         model_obj = self.env['ir.model']
         dependence_refs = mapper_vals.get('dep_field_ids', '').split('/')
+        del mapper_vals['dep_field_ids']
         model_id = model_obj.search([
             ('model', '=', mapper_vals['odoo_model_name'])])
         if not model_id:
             raise UserError(_('model %s not found')
                             % mapper_vals['odoo_model_name'])
-        exist_mapper = self.search_mapper(mapper_vals['ref_code'])
-        if exist_mapper:
-            return exist_mapper
 
         # CREATE MAPPER
         mapper_vals['odoo_model'] = model_id.id
@@ -100,7 +103,8 @@ class ImportMappers(models.TransientModel):
             if not dep_mapper:
                 continue
             dep_field = dep_mapper.mapper_fields_ids.filtered(
-                lambda f: f.odoo_relation == mapper_id.odoo_model_name
+                lambda f: not f.dependence_id and
+                f.dependence_ref_code == mapper_id.ref_code
             )
             if dep_field:
                 dep_field[0].write({'dependence_id': mapper_id.id})

@@ -1,6 +1,0 @@
-1- res_users
-2- hr_employee
-2.5 Crear modos de pago
-3- res_partner
-4- product_category
-5- product_template

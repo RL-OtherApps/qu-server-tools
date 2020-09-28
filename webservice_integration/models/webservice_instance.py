@@ -1,6 +1,8 @@
 # Copyright 2019 Xavier Jimenez <xavier.jimenez@qubiq.es>
 # Copyright 2019 Sergi Oliva <sergi.oliva@qubiq.es>
-# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+# Copyright 2020 Jesus Ramoneda <jesus.ramoneda@qubiq.es>
+# License AGPL-3.0 or later (https: //www.gnu.org/licenses/agpl).
+
 
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError, UserError, Warning
@@ -33,25 +35,50 @@ class Webservice(models.Model):
     ws_type = fields.Selection(
         string='Connection Type',
         selection=[
-            ('sql', 'SQL'),
-            ('odoo', 'Odoo')
-        ]
-    )
+            ('webservice.con.odoo', 'Odoo'),
+            ('webservice.con.mysql', 'MySQL'),
+            ('webservice.con.sqlserver', 'SQL Server'),
+        ])
+
     mapper_ids = fields.One2many(
         comodel_name='webservice.mapper',
         inverse_name='webservice_id',
         string='Mapper',
         copy=True,
     )
+    timeout = fields.Integer(string="Conection Timeout", default=300)
+
+    connexion = []
+
+    def close_connexion(self):
+        if self.connexion:
+            self.connexion = self._get_connexion_obj().close_connexion(self.connexion)
+
+    def read_data(self, vals):
+        ''''This function read data from db and return a dict'''
+        con_obj = self._get_connexion_obj()
+        #Check if there is a connection already
+        self.connexion = self.connexion or con_obj.connect(self._get_access_data())
+        data = con_obj.read_data(self.connexion, vals)
+        return data
+
+    def read_fields(self, table):
+        "Reads the name of the columns of one table/model"
+        con_obj = self._get_connexion_obj()
+        self.connexion = self.connexion or con_obj.connect(
+            self._get_access_data(), dictionary=False)
+        fields = con_obj.read_fields(self.connexion, table)
+        self.close_connexion()
+        return fields
 
     def _get_connexion_obj(self):
+        """Returns the connector model and connexion objects if
+            connect == True
+        """
         try:
-            if self.ws_type == 'sql':
-                return self.env['webservice.con.sqlserver']
-            elif self.ws_type == 'odoo':
-                return self.env['webservice.con.odoo']
-        except Exception:
-            return False
+            return self.env[self.ws_type]
+        except Exception as err:
+            raise UserError(str(err))
 
     def _get_access_data(self):
         return {
@@ -59,36 +86,12 @@ class Webservice(models.Model):
             'db': self.ws_db,
             'user': self.ws_username,
             'password': self.ws_password,
+            'timeout': self.timeout or 300,
         }
 
-    def _get_models_webservice(self):
-        try:
-            res = self._get_access_data()
-            conn_obj = self._get_connexion_obj()
-            if not conn_obj.check_connection(res):
-                raise Warning(_("Connection was failed"))
-            common = xmlrpc.client.ServerProxy(
-                '{}/xmlrpc/2/common'.format(res['host'])
-            )
-            common.version()
-            uid = common.authenticate(
-                res['db'], res['user'], res['password'], {}
-            )
-            models = xmlrpc.client.ServerProxy(
-                '{}/xmlrpc/2/object'.format(res['host']))
-            return models, res['db'], uid, res['password']
-        except UserError as err:
-            _logger.debug(ustr(err))
-            raise UserError(str(err))
-
-    @api.multi
     def check_connection_webservice(self):
-        try:
-            self.ensure_one()
-            conn_obj = self._get_connexion_obj()
-            data = self._get_access_data()
-            if conn_obj.check_connection(data):
-                raise Warning(_("Connection was succesful"))
-        except UserError as err:
-            _logger.debug(ustr(err))
-            raise UserError(str(err))
+        """Check the connection"""
+        self.ensure_one()
+        conn_obj = self._get_connexion_obj()
+        data = self._get_access_data()
+        conn_obj.check_connection(data)

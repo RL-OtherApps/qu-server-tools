@@ -4,7 +4,7 @@
 <odoo>
     <data>
         <menuitem id="webservice_main_menu"
-            name="Webservices" groups='webservice_manager_group'/>
+            name="Webservices" groups='webservice_manager_group' web_icon="webservice_integration,static/description/logo_webservice.png"/>
         <menuitem id="data_webservice_menu"
             parent='webservice_main_menu' name="Data"
             sequence='1'/>
