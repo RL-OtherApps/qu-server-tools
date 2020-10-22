@@ -5,6 +5,7 @@ from odoo.exceptions import UserError, ValidationError
 class WebserviceMapperFields(models.Model):
     _name = 'webservice.mapper.fields'
     _description = 'Webservice Mapper Fields'
+
     odoo_field = fields.Many2one(
         comodel_name='ir.model.fields',
         required=True,
@@ -12,6 +13,7 @@ class WebserviceMapperFields(models.Model):
     odoo_relation = fields.Char(related="odoo_field.relation")
     field_type = fields.Selection(related="odoo_field.ttype")
     source_field = fields.Char(help="Field name from the source")
+    dependence_ref_code = fields.Char(index=True, copy=False)
     dependence_id = fields.Many2one(
         comodel_name='webservice.mapper',)
     webservice_mapper_id = fields.Many2one(
@@ -24,9 +26,15 @@ class WebserviceMapperFields(models.Model):
         selection=[('not_check', 'Not Checked'),
                    ('valid', 'Valid'),
                    ('not_valid', 'Not Valid')],
-        default='not_check')
+        default='not_check',
+        compute="_compute_state_valid",
+        store=True)
 
-    unique = fields.Boolean(string='')
+    @api.depends('source_field', 'odoo_field')
+    def _compute_state_valid(self):
+        self.state_valid = False
+
+    unique = fields.Boolean(help="Is a unique field?")
     map_values = fields.Char(string='Map Values',
                              help="Transform values recivied")
     create_method = fields.Selection(
@@ -37,24 +45,13 @@ class WebserviceMapperFields(models.Model):
         store=True, readonly=False)
     search_operator = fields.Selection(
         selection=[('&', 'AND'), ('|', 'OR')], default="|")
+    sequence = fields.Integer(default=10)
 
     @api.depends('field_type')
     def _compute_create_method(self):
         for rec in self:
             if rec.field_type in ["one2many", "many2many"]:
                 rec.create_method = 'together'
-
-    def get_export_field_data(self):
-        """Returns a list with data for export"""
-        return [
-            self.odoo_field.name,
-            self.source_field or "",
-            self.dependence_id.get_ref_code() or "",
-            self.unique,
-            self.map_values or "",
-            self.create_method or "",
-            self.search_operator or ""
-        ]
 
     def get_company_domain(self):
         """This function returns company domain if
@@ -76,7 +73,8 @@ class WebserviceMapperFields(models.Model):
         return [(self.odoo_field.name, op, value)]
 
     def transform_data(self, val):
-        """Recive, transform and return data"""
+        """Recive, transform and return data accordingly
+         with the map_values field"""
         self.ensure_one()
         try:
             if not self.map_values:
@@ -130,36 +128,32 @@ class WebserviceMapperFields(models.Model):
             raise UserError("Error when creating dependence mappers:\n %s"
                             % str(e))
 
-    def search_record(self, value, many2many):
+    def search_record(self, value, many2many, search_name=True):
         """Search relation by name or by old id
         return the record or False"""
-        model_obj = self.env['ir.model'].search([('model', '=',
-                                                  self.odoo_relation)])
-        if not model_obj:
+        try:
+            model_obj = self.env[self.odoo_relation]
+        except Exception:
             raise UserError(_("Model %s not found!") % self.odoo_relation)
-        field = self.env['ir.model.fields'].search_count([
-            ('model_id', '=', model_obj.id), ('name', '=', 'x_old_id')
-        ])
-        if field:
+        if 'x_old_id' in model_obj._fields:
             if many2many:
                 domain = [('x_old_id', 'in', value)]
             else:
                 domain = [('x_old_id', '=', value[0])]
-            print(domain)
             rec = self.env[self.odoo_relation].search(domain)
             if rec and many2many:
                 return rec
-            if len(rec) == 1:
+            elif len(rec) == 1:
                 return rec
-        if many2many:
+        field = True
+        if not search_name or many2many:
             return False
-        if (self.env['ir.model.fields'].search_count([
-            ('model_id', '=', model_obj.id), ('name', '=', 'display_name')
-        ])):
+        if 'display_name' in model_obj._fields:
+            # This can slow the process
+            # Display name is a field computed we cannot search
+            # with the ORM
             domain = []
-        elif (self.env['ir.model.fields'].search_count([
-            ('model_id', '=', model_obj.id), ('name', '=', 'name')
-        ])):
+        elif 'name' in model_obj._fields:
             domain = [('name', '=', value[1])]
         else:
             field = False

@@ -25,7 +25,7 @@
                         </group>
                         <group name="main" attrs="{'invisible': [('webservice_active', '=', False)]}">
                             <group>
-                                <field name="ws_type"/>
+                                <field name="ws_type" attrs="{'required': [('webservice_active', '=', True)]}"/>
                                 <field name="ws_url"/>
                                 <field name="ws_db"/>
                                 <field name="ws_username"/>
@@ -65,7 +65,6 @@
         <record id="webservice_instance_action" model="ir.actions.act_window">
             <field name="name">Webservice Instances</field>
             <field name="res_model">webservice.instance</field>
-            <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
         </record>
 

@@ -6,6 +6,7 @@ from odoo.tests import common, tagged
 
 class TestMapper(common.TransactionCase):
 
+    # This needs to be work carefully, for ensure the properly work of the module
     def setUp(self):
         super(TestMapper, self).setUp()
         self.Mapper = self.env['webservice.mapper']
@@ -48,7 +49,6 @@ class TestMapper(common.TransactionCase):
 
     def test_fail(self):
         self.assertEqual(1, 2, msg="FAILED IN 1=2")
-        print("ENTRA")
 
     def test_check_mapped_fields(self):
         """ Checks if the _check_mapped_fields works properly
